@@ -1,0 +1,186 @@
+{
+  "log": {
+    "disabled": true,
+    "level": "warn",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "ions-dns",
+        "address": "1.0.0.1",
+        "strategy": "ipv4_only",
+        "detour": "ions"
+      },
+      {
+        "tag": "direct-dns",
+        "address": "local",
+        "strategy": "ipv4_only",
+        "detour": "direct"
+      },
+      {
+        "tag": "block-dns",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "domain_suffix": [
+          ".arpa.",
+          ".arpa"
+        ],
+        "server": "block-dns",
+        "rewrite_ttl": 20
+      },
+      {
+        "domain_suffix": [
+          "ions-do.zidstore.id",
+          "ions-do.zidstore.id"
+        ],
+        "server": "direct-dns",
+        "rewrite_ttl": 20
+      },
+      {
+        "network": "udp",
+        "port": 443,
+        "server": "block-dns",
+        "rewrite_ttl": 20
+      },
+      {
+        "outbound": "ions",
+        "server": "ions-dns",
+        "rewrite_ttl": 20
+      },
+      {
+        "outbound": "direct",
+        "server": "direct-dns",
+        "rewrite_ttl": 20
+      },
+      {
+        "outbound": "any",
+        "server": "direct-dns",
+        "rewrite_ttl": 20
+      }
+    ],
+    "reverse_mapping": true,
+    "strategy": "ipv4_only",
+    "independent_cache": true,
+    "disable_cache": true
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "tun0",
+      "inet4_address": "172.19.0.1/30",
+      "mtu": 9000,
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "system",
+      "endpoint_independent_nat": true,
+      "sniff": true
+    },
+    {
+      "listen": "0.0.0.0",
+      "listen_port": 2080,
+      "sniff": true,
+      "tag": "mixed-in",
+      "type": "mixed"
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "🇸🇬 tls",
+      "type": "vmess",
+      "server": "quiz.int.vidio.com",
+      "server_port": 443,
+      "uuid": "ef8eea93-6a5d-4a99-b364-65c6fba49eb8",
+      "security": "auto",
+      "alter_id": 0,
+      "global_padding": false,
+      "authenticated_length": true,
+      "multiplex": {
+        "enabled": false,
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "ions-do.zidstore.id",
+        "insecure": true,
+        "disable_sni": false
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/vmess",
+        "headers": {
+          "Host": "ions-do.zidstore.id"
+        },
+        "max_early_data": 0,
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "domain_strategy": "ipv4_only"
+    },
+    {
+      "tag": "🇸🇬 non-tls",
+      "type": "vmess",
+      "server": "quiz.vidio.com",
+      "server_port": 80,
+      "uuid": "ef8eea93-6a5d-4a99-b364-65c6fba49eb8",
+      "security": "auto",
+      "alter_id": 0,
+      "global_padding": false,
+      "authenticated_length": true,
+      "multiplex": {
+        "enabled": false,
+        "protocol": "smux",
+        "max_streams": 32
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/vmess",
+        "headers": {
+          "Host": "ions-do.zidstore.id"
+        },
+        "max_early_data": 0,
+        "early_data_header_name": "Sec-WebSocket-Protocol"
+      },
+      "domain_strategy": "ipv4_only"
+    },
+    {
+      "type": "urltest",
+      "tag": "ions",
+      "outbounds": [
+        "🇸🇬 tls",
+        "🇸🇬 non-tls"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "1m0s"
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "override_android_vpn": true,
+    "final": "ions",
+    "rules": [
+      {
+        "outbound": "dns-out",
+        "port": [
+          53
+        ]
+      }
+    ]
+  }
+}
