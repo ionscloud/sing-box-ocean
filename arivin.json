@@ -94,7 +94,7 @@
       "type": "vmess",
       "server": "quiz.int.vidio.com",
       "server_port": 443,
-      "uuid": "106feb5c-9679-4a87-8f89-228097e613a5",
+      "uuid": "ee377be5-68c1-4403-86a0-d22e897fb0cb",
       "security": "auto",
       "alter_id": 0,
       "global_padding": false,
