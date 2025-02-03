@@ -35,7 +35,7 @@
       {
         "domain_suffix": [
           "ions-do.zidstore.id",
-          "idc.hariyono.my.id"
+          "idc2.hariyono.my.id"
         ],
         "server": "direct-dns",
         "rewrite_ttl": 20
@@ -140,7 +140,7 @@
         "type": "ws",
         "path": "/vmess",
         "headers": {
-          "Host": "idc.hariyono.my.id"
+          "Host": "idc2.hariyono.my.id"
         },
         "max_early_data": 0,
         "early_data_header_name": "Sec-WebSocket-Protocol"
