@@ -4,13 +4,27 @@
     "level": "warn",
     "timestamp": true
   },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db"
+    },
+    "clash_api": {
+      "external_controller": "0.0.0.0:9090",
+      "external_ui": "yacd",
+      "external_ui_download_url": "https://github.com/MetaCubeX/Yacd-meta/archive/gh-pages.zip",
+      "external_ui_download_detour": "Internet",
+      "secret": "",
+      "default_mode": "rule"
+    }
+  },
   "dns": {
     "servers": [
       {
-        "tag": "ions-dns",
-        "address": "1.0.0.1",
+        "tag": "Internet-dns",
+        "address": "1.1.1.1",
         "strategy": "ipv4_only",
-        "detour": "ions"
+        "detour": "Internet"
       },
       {
         "tag": "direct-dns",
@@ -34,8 +48,8 @@
       },
       {
         "domain_suffix": [
-          "ions-do.zidstore.id",
-          "idc2.hariyono.my.id"
+          "hrz.hariyono.my.id",
+          "hrz.hariyono.my.id"
         ],
         "server": "direct-dns",
         "rewrite_ttl": 20
@@ -47,8 +61,8 @@
         "rewrite_ttl": 20
       },
       {
-        "outbound": "ions",
-        "server": "ions-dns",
+        "outbound": "Internet",
+        "server": "Internet-dns",
         "rewrite_ttl": 20
       },
       {
@@ -90,11 +104,21 @@
   ],
   "outbounds": [
     {
-      "tag": "🇸🇬 tls",
+      "type": "urltest",
+      "tag": "Internet",
+      "outbounds": [
+        "🇮🇩HERZA",
+        "HERZA🇮🇩"
+      ],
+      "url": "https://detectportal.firefox.com/success.txt",
+      "interval": "1m0s"
+    },
+    {
+      "tag": "🇮🇩HERZA",
       "type": "vmess",
-      "server": "quiz.int.vidio.com",
+      "server": "quiz.vidio.com",
       "server_port": 443,
-      "uuid": "0a58c987-5584-4e3c-b915-0d84fbb35f69",
+      "uuid": "cc080013-226d-40d9-b2fa-a71e27f65dd2",
       "security": "auto",
       "alter_id": 0,
       "global_padding": false,
@@ -106,7 +130,7 @@
       },
       "tls": {
         "enabled": true,
-        "server_name": "ions-do.zidstore.id",
+        "server_name": "hrz.hariyono.my.id",
         "insecure": true,
         "disable_sni": false
       },
@@ -114,7 +138,7 @@
         "type": "ws",
         "path": "/vmess",
         "headers": {
-          "Host": "ions-do.zidstore.id"
+          "Host": "hrz.hariyono.my.id"
         },
         "max_early_data": 0,
         "early_data_header_name": "Sec-WebSocket-Protocol"
@@ -122,11 +146,11 @@
       "domain_strategy": "ipv4_only"
     },
     {
-      "tag": "🇸🇬 non-tls",
+      "tag": "HERZA🇮🇩",
       "type": "vmess",
       "server": "quiz.vidio.com",
       "server_port": 80,
-      "uuid": "106feb5c-9679-4a87-8f89-228097e613a5",
+      "uuid": "cc080013-226d-40d9-b2fa-a71e27f65dd2",
       "security": "auto",
       "alter_id": 0,
       "global_padding": false,
@@ -140,22 +164,12 @@
         "type": "ws",
         "path": "/vmess",
         "headers": {
-          "Host": "idc2.hariyono.my.id"
+          "Host": "hrz.hariyono.my.id"
         },
         "max_early_data": 0,
         "early_data_header_name": "Sec-WebSocket-Protocol"
       },
       "domain_strategy": "ipv4_only"
-    },
-    {
-      "type": "urltest",
-      "tag": "ions",
-      "outbounds": [
-        "🇸🇬 tls",
-        "🇸🇬 non-tls"
-      ],
-      "url": "http://www.gstatic.com/generate_204",
-      "interval": "1m0s"
     },
     {
       "type": "direct",
@@ -173,7 +187,15 @@
   "route": {
     "auto_detect_interface": true,
     "override_android_vpn": true,
-    "final": "ions",
+    "final": "Internet",
+    "geoip": {
+      "download_url": "https://github.com/malikshi/sing-box-geo/releases/latest/download/geoip.db",
+      "download_detour": "Internet"
+    },
+    "geosite": {
+      "download_url": "https://github.com/malikshi/v2ray-rules-dat/releases/latest/download/geosite.db",
+      "download_detour": "Internet"
+    },
     "rules": [
       {
         "outbound": "dns-out",
